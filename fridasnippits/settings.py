@@ -92,6 +92,9 @@ DATABASES = {
     }
 }
 
+import dj_database_url
+DATABASES['default'].update(dj_database_url.config())
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
