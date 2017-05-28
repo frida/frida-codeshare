@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+
+  <!-- Section -->
+  <section id="createNewProject">
+    <h2>Create a new project</h2>
+
+    <form id="new-project-form" method="post" action="#">{% csrf_token %}
+      <div class="row uniform">
+        <div class="6u 12u$(xsmall)">
+          <input @keyup="validateForm();" v-model="projectName" type="text" name="demo-name" id="demo-name" value="" placeholder="Name"/>
+        </div>
+        <div class="6u$ 12u$(xsmall)">
+          <div class="select-wrapper">
+            <select @change="validateForm" v-model="projectCategory" name="demo-category" id="demo-category">
+              <option value="">- Select a category -</option>
+              {% for category in categories %}
+                <option value="{{ category.name }}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="12u">
+          <input @keyup="validateForm" v-model="projectDesc" type="text" value="" placeholder="Description"/>
+        </div>
+
+        <!-- Break -->
+        <div class="12u$">
+          <div @keyup="validateForm" v-model="projectSource" id="editor"></div>
+        </div>
+
+        <div class="12u$ code-info">
+          <p>Once submitted you'll be able to run this project directly with </p>
+          <div class="box">
+            <pre>frida --codeshare {{ user.nickname }}/${projectSlug}</pre>
+          </div>
+        </div>
+
+        <!-- Break -->
+        <div class="12u$">
+          <ul class="actions">
+            <li><input @click="createProject" v-bind:class="{ disabled: !isValid }" type="button" value="Create Project" class="special"/></li>
+            <li><input type="button" value="Beautify" class="beautify-content special"/></li>
+            <li><input type="button" class="cancel-button" value="Cancel"/></li>
+          </ul>
+        </div>
+      </div>
+    </form>
+
+  </section>
+
+{% endblock %}
+
+{% block extrascripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify.min.js"></script>
+  <script>
+
+      var app = new Vue({
+          el: '#createNewProject',
+          delimiters: ['${', '}'],
+          data: {
+              isValid: false,
+              projectName: "",
+              projectSlug: "",
+              projectCategory: "",
+              projectSource: "",
+              projectDesc: "",
+          },
+          methods: {
+              validateForm: function(){
+                  this.isValid = this.projectName && this.projectCategory && this.projectSource && this.projectDesc;
+              },
+              createProject: function(){
+                  var payload = {
+                      "name": this.projectName,
+                      "category": this.projectCategory,
+                      "source": this.projectSource,
+                      "description" : this.projectDesc
+                  }
+
+                  $.post("/api/create-new", JSON.stringify(payload), function( data ) {
+                      if (data.success){
+                          window.location = data.link
+                      }
+                    }, "json")
+
+
+                  debugger;
+              }
+          },
+          watch: {
+              projectName: function(val, oldval){
+                  if (val.match(/[^a-zA-Z0-9\-\s]/gi)){
+                      this.projectName = this.projectName.replace(/[^a-zA-Z0-9\-\s]/gi, '')
+                  }
+                  this.projectSlug = this.projectName.replace(/\s/gi, '-').toLowerCase()
+              }
+          }
+      })
+
+      $('.cancel-button').click(function(){
+          window.history.back()
+      })
+
+      $('.beautify-content').click(function(e){
+          e.preventDefault();
+          var session = editor.getSession();
+          session.setValue(js_beautify(session.getValue()));
+      })
+
+      var beautify = ace.require("ace/ext/beautify");
+      var editor = ace.edit("editor");
+      editor.setTheme("ace/theme/monokai");
+      editor.getSession().setMode("ace/mode/javascript");
+      editor.setShowPrintMargin(false);
+
+      editor.on('change', function(e){
+          app.projectSource = editor.getSession().getValue()
+          app.validateForm()
+      })
+
+
+  $(document).ready(function(){
+
+    var heightUpdateFunction = function() {
+
+        // http://stackoverflow.com/questions/11584061/
+        var newHeight =
+                  editor.getSession().getScreenLength()
+                  * editor.renderer.lineHeight
+                  + editor.renderer.scrollBar.getWidth();
+
+        $('#editor').height(newHeight.toString() + "px");
+        $('#editor-section').height(newHeight.toString() + "px");
+
+        // This call is required for the editor to fix all of
+        // its inner structure for adapting to a change in size
+        editor.resize();
+    };
+
+    // Set initial size to match initial content
+    heightUpdateFunction();
+
+    // Whenever a change happens inside the ACE editor, update
+    // the size again
+    editor.getSession().on('change', heightUpdateFunction);
+})
+
+  </script>
+  <style>
+  #editor {
+      min-height: 16rem;
+  }
+  </style>
+{% endblock %}

@@ -1,0 +1,6 @@
+django
+whitenoise
+django-auth0
+gunicorn
+django-extensions
+voluptuous

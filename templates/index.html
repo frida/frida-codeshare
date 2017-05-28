@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+  <!-- Banner -->
+  <section id="banner">
+    <div class="content">
+      <header>
+        <h1>Unleash the power of Frida.</h1>
+      </header>
+      <p>"If I have seen further, it is by standing on the shoulders of giants."<br>&nbsp;&nbsp;&nbsp;&nbsp; -Sir Issac Newton</p>
+      <p>The Frida CodeShare project is comprised of developers from around the world working together with one goal - push <a href="https://frida.re/">Frida</a> to its limits in new and innovative ways.</p>
+      <p>Frida has <a href="#">amazing potential</a>, but needed a better forum to share ideas, so we've put together CodeShare to help stoke innovation and push Frida to its highest potential!</p>
+      <ul class="actions">
+        <li><a href="#" class="button big">Browse Code</a></li>
+      </ul>
+    </div>
+    <span class="image object">
+      <img src="{% static 'images/logo.png' %}" alt=""/>
+    </span>
+  </section>
+
+  <!-- Section -->
+  <section>
+    <header class="major">
+      <h2>Recently Submitted Projects</h2>
+    </header>
+    <div class="posts">
+      <article>
+        <a href="#" class="image"><img src="http://pipsum.com/416x256.jpg?6" alt=""/></a>
+        <h3>
+          <a href="#">Batman</a> |
+          <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 1.2k | <i class="fa fa-eye" aria-hidden="true"></i> 33
+        </h3>
+        <h4>Uploaded by: <a href="#">@fitblip</a></h4>
+        <p>Batman is an audio bridge into frida, allowing you to trace run Frida commands simply by growling them in your best Christian Bale impression.</p>
+        <ul class="actions">
+          <li><a href="#" class="button">Project Page</a></li>
+        </ul>
+      </article>
+      <article>
+        <a href="#" class="image"><img src="http://pipsum.com/416x256.jpg?5" alt=""/></a>
+        <h3>
+          <a href="#">Dog Day</a> |
+          <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 1.2k | <i class="fa fa-eye" aria-hidden="true"></i> 33
+        </h3>
+        <h4>Uploaded by: <a href="#">@oleavr</a></h4>
+        <p>Dog Day is a module that lets you tinker with the time functions of a program. Make time go fly by, or slow to a crawl!</p>
+        <ul class="actions">
+          <li><a href="#" class="button">Project Page</a></li>
+        </ul>
+      </article>
+      <article>
+        <a href="#" class="image"><img src="http://pipsum.com/416x256.jpg?4" alt=""/></a>
+        <h3>
+          <a href="#">BROKENRIDDLER</a> |
+          <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 1.2k | <i class="fa fa-eye" aria-hidden="true"></i> 33
+        </h3>
+        <h4>Uploaded by: <a href="#">@oleavr</a></h4>
+        <p>BROKENRIDDLER is a project aimed to club all random functions over the head, forcing them out output the same bytes, especially handy for reverse engineering and capture the flags!</p>
+        <ul class="actions">
+          <li><a href="#" class="button">Project Page</a></li>
+        </ul>
+      </article>
+      <article>
+        <a href="#" class="image"><img src="http://pipsum.com/416x256.jpg?3" alt=""/></a>
+        <h3>
+          <a href="#">Bubble Bobble</a> |
+          <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 1.2k | <i class="fa fa-eye" aria-hidden="true"></i> 33
+        </h3>
+        <h4>Uploaded by: <a href="#">@fitblip</a></h4>
+        <p>A proof-of-concept that takes all plaintext http requests and forces them to be SSL encrypted</p>
+        <ul class="actions">
+          <li><a href="#" class="button">Project Page</a></li>
+        </ul>
+      </article>
+      <article>
+        <a href="#" class="image"><img src="http://pipsum.com/416x256.jpg?2" alt=""/></a>
+        <h3>
+          <a href="#">Cosmic Bitflip</a> |
+          <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 1.2k | <i class="fa fa-eye" aria-hidden="true"></i> 33
+        </h3>
+        <h4>Uploaded by: <a href="#">@fitblip</a></h4>
+        <p>Can your code stand up to cosmic bitflips? Emulates a real cosmic bitflip in memory. Useful for ensuring safety critical systems are operating normally!</p>
+        <ul class="actions">
+          <li><a href="#" class="button">Project Page</a></li>
+        </ul>
+      </article>
+      <article>
+        <a href="#" class="image"><img src="http://pipsum.com/416x256.jpg?1" alt=""/></a>
+        <h3>
+          <a href="#">The Flash</a> |
+          <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 1.2k | <i class="fa fa-eye" aria-hidden="true"></i> 33
+        </h3>
+        <h4>Uploaded by: <a href="#">@oleavr</a></h4>
+        <p>The Flash is a project aimed at uncovering race conditions with multiple processes by starting 2 processes simulatniously and pausing one at random intervals.</p>
+        <ul class="actions">
+          <li><a href="#" class="button">Project Page</a></li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block extrascripts %}
+  <script src="https://cdn.auth0.com/js/lock/10.16.0/lock.min.js"></script>
+
+  <script>
+      $(document).ready(function () {
+          var lock = new Auth0Lock(
+              "{{ AUTH0_CLIENT_ID }}",
+              "{{ AUTH0_DOMAIN }}",
+              {
+                  allowedConnections: ["google-oauth2", "github"],
+                  rememberLastLogin: true,
+                  socialButtonStyle: "big",
+                  languageDictionary: {"title": "Auth0"},
+                  language: "en",
+                  theme: {
+                      "logo": "{% static "images/logo-small.png" %}",
+                      "primaryColor": "#EF6456"
+                  },
+                  auth: {
+                      redirectUrl: '{{ AUTH0_CALLBACK_URL }}',
+                      responseType: 'code',
+                      params: {
+                          scope: 'openid email'
+                      }
+                  }
+              }
+          );
+
+          $('.login').click(function (e) {
+              e.preventDefault();
+              lock.show();
+          });
+      });
+  </script>
+{% endblock %}

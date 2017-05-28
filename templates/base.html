@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Frida CodeShare</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <!--[if lte IE 8]><script src="{% static 'js/ie/html5shiv.js' %}"></script><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="{% static 'css/ie9.css' %}" /><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="{% static 'css/ie8.css' %}" /><![endif]-->
+
+    {% block extrastyles %}{% endblock %}
+	</head>
+	<body>
+  <!-- Wrapper -->
+  <div id="wrapper">
+     <!-- Main -->
+    <div id="main">
+      <div class="inner">
+
+        <!-- Header -->
+        <header id="header">
+          <ul class="icons">
+            <li><a href="/" class="logo">Frida CodeShare</a></li>
+            <li><a href="https://twitter.com/fridadotre" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+            <li><a href="https://github.com/frida" class="icon fa-github"><span class="label">Github</span></a></li>
+          </ul>
+          {% if user.is_authenticated %}
+            <div class="right-aligned">
+            {% if user.is_superuser %}
+              <a href="/django_admin" class="logo right">Admin Panel</a> |
+            {% endif %}
+              <a href="/projects" class="logo right">Your Projects</a> |
+              <a href="/new" class="logo right">Create New Project</a> |
+              <a class="logo right" href="/sign-out">Log Out</a>
+            </div>
+
+          {% else %}
+            <a href="" class="logo right login">Log In</a>
+          {% endif %}
+
+        </header>
+
+
+        {% block body %}{% endblock %}
+
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" {% if not expand_sidebar %}class="inactive"{% endif %}>
+      <div class="inner">
+
+        <!-- Search -->
+        <section id="search" class="alt">
+          <form method="post" action="#">
+            <input type="text" name="query" id="query" placeholder="Search"/>
+          </form>
+        </section>
+
+        <!-- Menu -->
+        <nav id="menu">
+          <header class="major">
+            <h2>Top Categories</h2>
+          </header>
+          <ul>
+            <li><a href="#">Testing</a></li>
+            <li><a href="#">Debugging</a></li>
+            <li><a href="#">Crypto</a></li>
+            <li><a href="#">Exploitation</a></li>
+            <li><a href="#">Visualization</a></li>
+            <li><a href="#">Logging</a></li>
+          </ul>
+        </nav>
+
+        <!-- Section -->
+        <section>
+          <header class="major">
+            <h2>Most Popular Projects</h2>
+          </header>
+          <div class="mini-posts">
+            <article>
+              <a href="#" class="image"><img src="{% static 'images/network-monkey.png' %}" alt=""/></a>
+              <h4><a href="#">Network Monkey</a> | <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 1.2k | <i class="fa fa-eye" aria-hidden="true"></i> 33</h4>
+              <p>Network monkey tests the resialiance of your application by hooking the network function calls and returning socket errors, </p>
+              <ul class="actions">
+                <li><a href="#" class="button">Project Page</a></li>
+              </ul>
+            </article>
+            <article>
+              <a href="#" class="image"><img src="{% static 'images/attack-map.png' %}" alt=""/></a>
+              <h4><a href="#">Attack Map</a> | <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 1.2k | <i class="fa fa-eye" aria-hidden="true"></i> 33</h4>
+              <p>The attack map snippit outputs JSON compaitble with Frida's <a href="#frida-globe-dashboard">Global Dashboard</a>, allowing you to visualize connections made by your program in real time!</p>
+              <ul class="actions">
+                <li><a href="#" class="button">Project Page</a></li>
+              </ul>
+            </article>
+            <article>
+              <a href="#" class="image"><img src="http://pipsum.com/288x174.jpg" alt=""/></a>
+              <h4><a href="#">Something else!</a> | <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 1.2k | <i class="fa fa-eye" aria-hidden="true"></i> 33</h4>
+              <p>I can't think of anything else cool right now :-P</p>
+              <ul class="actions">
+                <li><a href="#" class="button">Project Page</a></li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <!-- Section -->
+        <section>
+          <header class="major">
+            <h2>Get in touch</h2>
+          </header>
+          <p>Have some feedback? Something not working? We'd love to hear from you!</p>
+          <ul class="contact">
+            <li class="fa-envelope-o"><a href="#">oleavr@nowsecure.com</a></li>
+            <li class="fa-slack"><a href="#">Join our Slack channel</a></li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+
+  </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/skel.min.js' %}"></script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <!--[if lte IE 8]><script src="{% static 'js/ie/respond.min.js' %}"></script><![endif]-->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+      function csrfSafeMethod(method) {
+          // these HTTP methods do not require CSRF protection
+          return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+              if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                  xhr.setRequestHeader("X-CSRFToken", jQuery("[name=csrfmiddlewaretoken]").val());
+              }
+          },
+          contentType: "application/json; charset=utf-8"
+      });
+    </script>
+
+    {% block extrascripts %}{% endblock %}
+
+	</body>
+</html>

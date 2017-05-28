@@ -1,0 +1,28 @@
+@import 'libs/vars';
+@import 'libs/functions';
+@import 'libs/mixins';
+@import 'libs/skel';
+
+/*
+	Editorial by Pixelarity
+	pixelarity.com | hello@pixelarity.com
+	License: pixelarity.com/license
+*/
+
+/* Button */
+
+	input[type="submit"],
+	input[type="reset"],
+	input[type="button"],
+	button,
+	.button {
+		border: solid 2px _palette(accent);
+	}
+
+/* Posts */
+
+	.posts {
+		article {
+			width: 40%;
+		}
+	}

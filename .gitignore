@@ -1,0 +1,5 @@
+*.pyc
+.idea/
+static/.sass-cache/*
+*.sqlite3
+db.sqlite3
