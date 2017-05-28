@@ -40,6 +40,7 @@
 
         <!-- Break -->
         <div class="12u$">
+          <p v-model="errorMsg">${errorMsg}</p>
           <ul class="actions">
             <li><input @click="createProject" v-bind:class="{ disabled: !isValid }" type="button" value="Create Project" class="special"/></li>
             <li><input type="button" value="Beautify" class="beautify-content special"/></li>
@@ -69,12 +70,15 @@
               projectCategory: "",
               projectSource: "",
               projectDesc: "",
+              errorMsg: ""
           },
           methods: {
               validateForm: function(){
                   this.isValid = this.projectName && this.projectCategory && this.projectSource && this.projectDesc;
               },
               createProject: function(){
+                  this.isValid = false;
+                  var that = this;
                   var payload = {
                       "name": this.projectName,
                       "category": this.projectCategory,
@@ -82,14 +86,18 @@
                       "description" : this.projectDesc
                   }
 
-                  $.post("/api/create-new", JSON.stringify(payload), function( data ) {
-                      if (data.success){
+                  $.post("/api/create-new", JSON.stringify(payload), function (data) {
+                      if (data.success) {
                           window.location = data.link
                       }
-                    }, "json")
+                  }, "json")
+                      .error(function(error){
+                        debugger;
+                      })
+                      .always(function () {
+                          that.isValid = true
+                      })
 
-
-                  debugger;
               }
           },
           watch: {

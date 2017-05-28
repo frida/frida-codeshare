@@ -5,15 +5,25 @@
 
   <!-- Section -->
   <section id="editProject">
-    <h2>Project: {{ project.project_name }}</h2>
+    <h2>Editing "{{ project.project_name }}"</h2>
 
     <form id="new-project-form" method="post" action="#">{% csrf_token %}
       <div class="row uniform">
-        <div class="12u$ code-info">
-          <p>Try this code out now by running  </p>
-          <div class="box">
-            <pre>$ frida --codeshare {{ project.owner.nickname }}/${projectSlug}</pre>
+        <div class="6u 12u$(xsmall)">
+          <input @keyup="validateForm();" v-model="projectName" disabled="disabled" type="text" name="demo-name" id="demo-name" value="" placeholder="Name"/>
+        </div>
+        <div class="6u$ 12u$(xsmall)">
+          <div class="select-wrapper">
+            <select @change="validateForm" v-model="projectCategory" name="demo-category" id="demo-category">
+              <option value="">- Select a category -</option>
+              {% for category in categories %}
+                <option value="{{ category.name }}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
           </div>
+        </div>
+        <div class="12u">
+          <input @keyup="validateForm" v-model="projectDesc" type="text" value="" placeholder="Description"/>
         </div>
 
         <!-- Break -->
@@ -25,10 +35,11 @@
         <div class="12u$">
           <p v-model="errorMsg">${errorMsg}</p>
           <ul class="actions">
-            {% if project.owner == request.user %}
-            <li><a href="{{ project.url }}edit/" class="button special">Edit</a></li>
-            {% endif %}
-            <li><input type="button" class="cancel-button" value="Back"/></li>
+            <li><input @click="updateProject" v-bind:class="{ disabled: !isValid }" type="button" value="Update Project" class="special"/></li>
+            <li><input type="button" value="Beautify" class="beautify-content special"/></li>
+            <li><input type="button" class="delete-button special" value="Delete Project"/></li>
+            <li><input type="button" class="cancel-button" value="Cancel"/></li>
+
           </ul>
         </div>
       </div>
@@ -58,10 +69,29 @@
           },
           methods: {
               validateForm: function(){
-                  return
+                  this.isValid = this.projectName && this.projectCategory && this.projectSource && this.projectDesc;
               },
               updateProject: function(){
-                  return
+                  this.isValid = false;
+                  var that = this;
+                  var payload = {
+                      "category": this.projectCategory,
+                      "source": this.projectSource,
+                      "description" : this.projectDesc
+                  }
+
+                  $.post("/api/update/{{ project.owner.nickname }}/{{ project.project_slug }}/", JSON.stringify(payload), function (data) {
+                      if (data.success) {
+                          window.location = "/@{{ project.owner.nickname }}/{{ project.project_slug }}"
+                      }
+                  }, "json")
+                      .error(function(error){
+                        debugger;
+                      })
+                      .always(function () {
+                          that.isValid = true
+                      })
+
               }
           },
           watch: {
@@ -102,7 +132,6 @@
       editor.setTheme("ace/theme/monokai");
       editor.getSession().setMode("ace/mode/javascript");
       editor.setShowPrintMargin(false);
-      editor.setReadOnly(true);
 
       editor.on('change', function(e){
           app.projectSource = editor.getSession().getValue()

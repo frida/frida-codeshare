@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+  <!-- Section -->
+  <section>
+    <header class="major">
+      <h2>@{{ info_user.nickname }}'s Projects</h2>
+    </header>
+    <div class="posts">
+      {% for project in projects %}
+        <article>
+          <h2><a href="{{ project.url }}">{{ project.project_name }}</a></h2>
+          <h3>
+            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> {{ project.vote_count }} | <i class="fa fa-eye" aria-hidden="true"></i> {{ project.view_count }}
+          </h3>
+          <p>{{ project.description }}</p>
+          <ul class="actions">
+            <li><a href="{{ project.url }}" class="button">Project Page</a></li>
+            {% if project.owner == request.user %}
+            <li><a href="{{ project.url }}edit" class="button">Edit</a></li>
+            {% endif %}
+          </ul>
+        </article>
+      {% empty %}
+        <article>
+          <h2>No projects to show yet! {% if info_user == user %} Why not <a href="/new">create one</a>? {% endif %}</h2>
+
+
+        </article>
+
+      {% endfor %}
+      {% if projects_are_odd %}
+        <article></article>
+      {% endif %}
+    </div>
+
+  </section>
+
+{% endblock %}
+
+{% block extrascripts %}
+  <script src="https://cdn.auth0.com/js/lock/10.16.0/lock.min.js"></script>
+
+  <script>
+      $(document).ready(function () {
+          var lock = new Auth0Lock(
+              "{{ AUTH0_CLIENT_ID }}",
+              "{{ AUTH0_DOMAIN }}",
+              {
+                  allowedConnections: ["google-oauth2", "github"],
+                  rememberLastLogin: true,
+                  socialButtonStyle: "big",
+                  languageDictionary: {"title": "Auth0"},
+                  language: "en",
+                  theme: {
+                      "logo": "{% static "images/logo-small.png" %}",
+                      "primaryColor": "#EF6456"
+                  },
+                  auth: {
+                      redirectUrl: '{{ AUTH0_CALLBACK_URL }}',
+                      responseType: 'code',
+                      params: {
+                          scope: 'openid email'
+                      }
+                  }
+              }
+          );
+
+          $('.login').click(function (e) {
+              e.preventDefault();
+              lock.show();
+          });
+      });
+  </script>
+{% endblock %}

@@ -6,3 +6,9 @@ NewProjectSchema = Schema({
     "source": All(str, Length(min=1)),
     "description": All(str, Length(min=1))
 }, required=True)
+
+UpdateProjectSchema = Schema({
+    "category": All(str, Length(min=1)),
+    "source": All(str, Length(min=1)),
+    "description": All(str, Length(min=1))
+}, required=True)
