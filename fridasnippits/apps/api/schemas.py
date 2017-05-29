@@ -12,3 +12,7 @@ UpdateProjectSchema = Schema({
     "source": All(str, Length(min=1)),
     "description": All(str, Length(min=1))
 }, required=True)
+
+LikeProjectSchema = Schema({
+    "project_uuid": All(str, Length(min=1))
+})

@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import F
 from django_extensions.db.models import TimeStampedModel
 from django.utils.crypto import get_random_string
 
@@ -15,7 +16,6 @@ class Project(TimeStampedModel):
     project_name = models.TextField()
     project_source = models.TextField()
     description = models.TextField()
-    likes = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
     hash = models.TextField()
     project_slug = models.TextField()
@@ -37,7 +37,7 @@ class Project(TimeStampedModel):
 
     @property
     def vote_count(self):
-        return self._human_format(self.likes)
+        return self._human_format(self.liked_by.count())
 
     @property
     def view_count(self):
@@ -47,12 +47,20 @@ class Project(TimeStampedModel):
     def frida_command(self):
         return "$ frida --codeshare {}/{}".format(self.owner.nickname, self.slug)
 
+    def increment_view(self):
+        self.views = F('views') + 1
+        self.save()
+
     def is_owned_by(self, user):
         return user == self.owner
+
+    def is_liked_by(self, user):
+        return user.id in self.liked_by.values_list('id', flat=True)
 
 class User(AbstractUser, TimeStampedModel):
     nickname = models.TextField(null=True)
     api_token = models.TextField(unique=True, default=generate_api_token)
+    liked_projects = models.ManyToManyField(Project, related_name="liked_by")
 
     def mark_as_admin(self):
         self.is_superuser = True

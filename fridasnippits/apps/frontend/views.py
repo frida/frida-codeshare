@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import render, redirect
 
@@ -10,7 +11,7 @@ from fridasnippits.apps.frontend.models import Category, Project, User
 
 
 def index(request):
-    projects = Project.objects.order_by('likes')[:6]
+    projects = Project.objects.annotate(count=Count('liked_by')).order_by('-count')[:6]
     for project in projects:
         project.url = request.build_absolute_uri(reverse('project_view', kwargs={"nickname": "@" + project.owner.nickname, "project_slug": project.project_slug}))
     return render(request, 'index.html', {
@@ -19,7 +20,7 @@ def index(request):
     })
 
 def browse(request):
-    projects = Project.objects.order_by('likes')
+    projects = Project.objects.annotate(count=Count('liked_by')).order_by('-count')
     paginator = Paginator(projects, 16)
     page = request.GET.get('page')
     try:
@@ -42,12 +43,14 @@ def project_view(request, nickname, project_slug):
     try:
         project_user = User.objects.get(nickname=nickname[1:])
         project = Project.objects.get(owner=project_user, project_slug=project_slug.lower())
+        project.increment_view()
     except Project.DoesNotExist:
         raise Http404
 
     return render(request, 'project_view.html', {
         "project": project,
-        "is_owner": project.is_owned_by(request.user)
+        "is_owner": project.is_owned_by(request.user),
+        "user_has_liked_project": project.is_liked_by(request.user)
     })
 
 

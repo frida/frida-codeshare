@@ -23,10 +23,24 @@
 
         <!-- Break -->
         <div class="12u$">
-          <p v-model="errorMsg">${errorMsg}</p>
+          <p class="error-message" v-model="errorMsg">${errorMsg}</p>
           <ul class="actions">
             {% if project.owner == request.user %}
             <li><a href="{{ project.url }}edit/" class="button special">Edit</a></li>
+            {% endif %}
+            {% if user.is_authenticated %}
+              <li>
+                <template v-if="!likeButtonDisabled">
+                  <a @click.prevent="sendLike" :class="{ disabled: likeButtonLoading }" :disabled="likeButtonLoading" href="#" class="button">
+                    <i aria-hidden="true" class="fa fa-thumbs-o-up"></i> Like Project
+                  </a>
+                </template>
+                <template v-else>
+                  <a href="" class="disabled button" disabled="disabled" class="button">
+                    <i class="fa fa-heart" aria-hidden="true"></i> Thanks!
+                  </a>
+                </template>
+              </li>
             {% endif %}
             <li><input type="button" class="cancel-button" value="Back"/></li>
           </ul>
@@ -54,7 +68,15 @@
               projectCategory: "{{ project.category.name | escapejs }}",
               projectSource: "{{ project.project_source | escapejs }}",
               projectDesc: "{{ project.description | escapejs }}",
-              errorMsg: ""
+              errorMsg: "",
+              projectUUID: "{{ project.project_id }}",
+              likeButtonDisabled: false,
+      {% if user_has_liked_project %}
+              likeButtonLoading: true,
+      {% else %}
+              likeButtonLoading: false,
+      {% endif %}
+
           },
           methods: {
               validateForm: function(){
@@ -62,6 +84,22 @@
               },
               updateProject: function(){
                   return
+              },
+              sendLike: function(){
+                  var that = this;
+                  this.likeButtonLoading = true;
+                  $.post("/api/like/", JSON.stringify({project_uuid: that.projectUUID}))
+                      .then(function success(result) {
+                          that.likeButtonDisabled = true;
+                      },
+                      function error(){
+                          that.errorMsg = "Unable to like this project! Support has been notified. Sorry 😓"
+                      })
+                      .always(function(){
+                          that.likeButtonLoading = false;
+                      });
+
+                  return false
               }
           },
           watch: {
@@ -89,7 +127,6 @@
               });
           };
       })
-
 
       $('.beautify-content').click(function(e){
           e.preventDefault();

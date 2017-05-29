@@ -2,11 +2,12 @@ import hashlib
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from fridasnippits.apps.api.schemas import UpdateProjectSchema, NewProjectSchema
+from fridasnippits.apps.api.schemas import UpdateProjectSchema, NewProjectSchema, LikeProjectSchema
 from fridasnippits.apps.frontend.models import Project, Category, User
 
 
@@ -28,6 +29,34 @@ def create_new(request):
         return JsonResponse({
             "success": True,
             "link": request.build_absolute_uri(reverse('project_view', kwargs={"nickname": "@" + request.user.nickname, "project_slug": project.project_slug}))
+        })
+    except:
+        return JsonResponse({
+            "success": False,
+            "error": "Invalid input!"
+        }, status=400)
+
+@login_required
+@require_http_methods(["POST",])
+def like_project(request):
+    try:
+        cleaned_data = LikeProjectSchema(json.loads(request.body))
+
+        project_uuid = cleaned_data['project_uuid']
+
+        if request.user.liked_projects.filter(project_id=project_uuid).exists():
+            return JsonResponse({
+                "success": False,
+                "error": "Already liked this project!"
+            }, status=400)
+
+        project = Project.objects.get(project_id=project_uuid)
+
+        request.user.liked_projects.add(project)
+        request.user.save()
+
+        return JsonResponse({
+            "success": True,
         })
     except:
         return JsonResponse({
@@ -79,3 +108,41 @@ def update_project(request, nickname, project_slug):
             "success": False,
             "error": "Invalid input!"
         }, status=400)
+
+
+def project_data(request, nickname, project_slug):
+    try:
+        owner = User.objects.get(nickname=nickname)
+        project = Project.objects.get(owner=owner, project_slug=project_slug)
+        return HttpResponse(json.dumps({
+            "id": str(project.project_id),
+            "project_name": project.project_name,
+            "description": project.description,
+            "source": project.project_source,
+            "slug": project.project_slug
+        }, indent=4), content_type="application/json")
+    except:
+        return JsonResponse({
+            "success": False,
+            "error": "Not found!"
+        }, status=404)
+
+def user_projects(request, nickname):
+    try:
+        owner = User.objects.get(nickname=nickname)
+        payload = []
+        for project in owner.project_set.all():
+            payload.append({
+                "id": str(project.project_id),
+                "project_name": project.project_name,
+                "description": project.description,
+                "source": project.project_source,
+                "slug": project.project_slug
+            })
+
+        return HttpResponse(json.dumps(payload, indent=4), content_type="application/json")
+    except:
+        return JsonResponse({
+            "success": False,
+            "error": "Not found!"
+        }, status=404)

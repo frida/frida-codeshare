@@ -2631,6 +2631,9 @@ button,
   .code-info p {
     margin: 0; }
 
+.error-message {
+  color: #EF6456; }
+
 /* Sidebar */
 #search form {
   text-decoration: none;
