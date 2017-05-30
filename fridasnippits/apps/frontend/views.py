@@ -24,13 +24,20 @@ def browse(request):
     paginator = Paginator(projects, 16)
     page = request.GET.get('page')
     try:
-        contacts = paginator.page(page)
+        results = paginator.page(page)
     except PageNotAnInteger:
-        contacts = paginator.page(1)
+        results = paginator.page(1)
     except EmptyPage:
-        contacts = paginator.page(paginator.num_pages)
+        results = paginator.page(paginator.num_pages)
 
-    return render(request, 'browse.html', {'projects': projects})
+    for project in results:
+        project.url = request.build_absolute_uri(reverse('project_view', kwargs={"nickname": "@" + project.owner.nickname, "project_slug": project.project_slug}))
+        project.is_owner = project.is_owned_by(request.user)
+
+    return render(request, 'browse.html', {
+        'projects': results,
+        "projects_are_odd": len(results) % 2 == 1
+    })
 
 @login_required
 def new(request):

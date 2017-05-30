@@ -19,7 +19,9 @@
           <p>{{ project.description }}</p>
           <ul class="actions">
             <li><a href="{{ project.url }}" class="button">Project Page</a></li>
-            <li><a href="{{ project.url }}edit" class="button">Edit</a></li>
+            {% if project.is_owner %}
+              <li><a href="{{ project.url }}edit" class="button">Edit</a></li>
+            {% endif %}
           </ul>
         </article>
       {% endfor %}
