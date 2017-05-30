@@ -9,6 +9,7 @@ from django.views.decorators.http import require_http_methods
 
 from fridasnippits.apps.api.schemas import UpdateProjectSchema, NewProjectSchema, LikeProjectSchema
 from fridasnippits.apps.frontend.models import Project, Category, User
+from fridasnippits.core.github import get_latest_frida_release
 
 
 @login_required
@@ -17,6 +18,7 @@ def create_new(request):
     try:
         cleaned_data = NewProjectSchema(json.loads(request.body))
         project_category = Category.objects.get(name=cleaned_data['category'])
+        latest_release = get_latest_frida_release()
         project = Project.objects.create(
             owner=request.user,
             category=project_category,
@@ -24,7 +26,8 @@ def create_new(request):
             project_source=cleaned_data['source'],
             hash=hashlib.sha256(cleaned_data['source'].encode('utf-8')).hexdigest(),
             description=cleaned_data['description'],
-            project_slug=Project.generate_slug(cleaned_data['name'])
+            project_slug=Project.generate_slug(cleaned_data['name']),
+            latest_version=latest_release
         )
         return JsonResponse({
             "success": True,
@@ -114,13 +117,7 @@ def project_data(request, nickname, project_slug):
     try:
         owner = User.objects.get(nickname=nickname)
         project = Project.objects.get(owner=owner, project_slug=project_slug)
-        return HttpResponse(json.dumps({
-            "id": str(project.project_id),
-            "project_name": project.project_name,
-            "description": project.description,
-            "source": project.project_source,
-            "slug": project.project_slug
-        }, indent=4), content_type="application/json")
+        return HttpResponse(json.dumps(project.serialize(), indent=4), content_type="application/json")
     except:
         return JsonResponse({
             "success": False,
@@ -132,13 +129,7 @@ def user_projects(request, nickname):
         owner = User.objects.get(nickname=nickname)
         payload = []
         for project in owner.project_set.all():
-            payload.append({
-                "id": str(project.project_id),
-                "project_name": project.project_name,
-                "description": project.description,
-                "source": project.project_source,
-                "slug": project.project_slug
-            })
+            payload.append(project.serialize())
 
         return HttpResponse(json.dumps(payload, indent=4), content_type="application/json")
     except:

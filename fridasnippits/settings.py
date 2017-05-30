@@ -104,11 +104,16 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'django_cache',
+    }
+}
 
 AUTH0_DOMAIN = 'frida-codeshare.auth0.com'
 AUTH0_CLIENT_ID = 'CAjPH9xC2RveJ7Ai2NGVJHqpqLNDxqXB'
-AUTH0_SECRET = 'LVMlAKARCPHQYnKlJHEqiIaKL952MRck-5ssGr83p3tGqWNJ5K7DGc81GQx1tB-Y'
+AUTH0_SECRET = os.environ['AUTH0_CLIENT_SECRET']
 
 if DEBUG:
     AUTH0_CALLBACK_URL = 'http://127.0.0.1:8000/auth/callback/'

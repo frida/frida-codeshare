@@ -19,9 +19,20 @@ class Project(TimeStampedModel):
     views = models.IntegerField(default=0)
     hash = models.TextField()
     project_slug = models.TextField()
+    latest_version = models.TextField()
 
     class Meta:
         unique_together = ("owner", "project_slug")
+
+    def serialize(self):
+        return {
+            "id": str(self.project_id),
+            "project_name": self.project_name,
+            "description": self.description,
+            "source": self.project_source,
+            "slug": self.project_slug,
+            "frida_version": self.latest_version
+        }
 
     @staticmethod
     def generate_slug(name):
