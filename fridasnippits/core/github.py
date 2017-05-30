@@ -9,6 +9,8 @@ def get_latest_frida_release():
 
     try:
         response = requests.get('https://api.github.com/repos/frida/frida/releases').json()
-        cache.set(CACHE_KEY, [x['tag_name'] for x in response], 3600)
+        release_tags = [x['tag_name'] for x in response]
+        cache.set(CACHE_KEY, release_tags, 3600)
+        return release_tags[0]
     except:
         return ""
