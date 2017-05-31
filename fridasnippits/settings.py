@@ -28,7 +28,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
 
-ALLOWED_HOSTS = ['frida-codeshare.herokuapp.com', "127.0.0.1"]
+ALLOWED_HOSTS = ['codeshare.frida.re', 'frida-codeshare.herokuapp.com', "127.0.0.1"]
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -118,8 +118,8 @@ AUTH0_SECRET = os.environ['AUTH0_CLIENT_SECRET']
 if DEBUG:
     AUTH0_CALLBACK_URL = 'http://127.0.0.1:8000/auth/callback/'
 else:
-    #AUTH0_CALLBACK_URL = 'https://codeshare.frida.re/auth/callback/'
-    AUTH0_CALLBACK_URL = 'https://frida-codeshare.herokuapp.com/auth/callback/'
+    AUTH0_CALLBACK_URL = 'https://codeshare.frida.re/auth/callback/'
+    # AUTH0_CALLBACK_URL = 'https://frida-codeshare.herokuapp.com/auth/callback/'
 
 AUTH0_SUCCESS_URL = '/'
 
