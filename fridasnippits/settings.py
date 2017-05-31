@@ -51,7 +51,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = 'frontend.User'
-
+SECURE_SSL_REDIRECT = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
