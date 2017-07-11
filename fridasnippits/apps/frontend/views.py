@@ -48,7 +48,7 @@ def new(request):
 
 def project_view(request, nickname, project_slug):
     try:
-        project_user = User.objects.get(nickname=nickname[1:])
+        project_user = User.objects.get(nickname__iexact=nickname[1:])
         project = Project.objects.get(owner=project_user, project_slug=project_slug.lower())
         project.increment_view()
     except Project.DoesNotExist:
@@ -64,7 +64,7 @@ def project_view(request, nickname, project_slug):
 @login_required
 def project_edit(request, nickname, project_slug):
     try:
-        requested_user = User.objects.get(nickname=nickname[1:])
+        requested_user = User.objects.get(nickname__iexact=nickname[1:])
         project = Project.objects.get(project_slug=project_slug.lower())
         if requested_user != request.user:
             raise Http404
@@ -80,7 +80,7 @@ def user_info_view(request, nickname):
     nickname = nickname[1:]
 
     try:
-        requested_user = User.objects.get(nickname=nickname)
+        requested_user = User.objects.get(nickname__iexact=nickname)
         projects_queryset = Project.objects.filter(owner=requested_user)
         for project in projects_queryset:
             project.url = request.build_absolute_uri(reverse('project_view', kwargs={"nickname": "@" + requested_user.nickname, "project_slug": project.project_slug}))

@@ -71,7 +71,7 @@ def like_project(request):
 @require_http_methods(["POST", "DELETE"])
 def update_project(request, nickname, project_slug):
     try:
-        project_owner = User.objects.get(nickname=nickname)
+        project_owner = User.objects.get(nickname__iexact=nickname)
         if project_owner != request.user:
             return JsonResponse({
                 "success": False,
@@ -115,7 +115,7 @@ def update_project(request, nickname, project_slug):
 
 def project_data(request, nickname, project_slug):
     try:
-        owner = User.objects.get(nickname=nickname)
+        owner = User.objects.get(nickname__iexact=nickname)
         project = Project.objects.get(owner=owner, project_slug=project_slug)
         return HttpResponse(json.dumps(project.serialize(), indent=4), content_type="application/json")
     except:
@@ -126,7 +126,7 @@ def project_data(request, nickname, project_slug):
 
 def user_projects(request, nickname):
     try:
-        owner = User.objects.get(nickname=nickname)
+        owner = User.objects.get(nickname__iexact=nickname)
         payload = []
         for project in owner.project_set.all():
             payload.append(project.serialize())
