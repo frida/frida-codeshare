@@ -51,7 +51,7 @@ def project_view(request, nickname, project_slug):
         project_user = User.objects.get(nickname__iexact=nickname[1:])
         project = Project.objects.get(owner=project_user, project_slug=project_slug.lower())
         project.increment_view()
-    except Project.DoesNotExist:
+    except:
         raise Http404
 
     return render(request, 'project_view.html', {
