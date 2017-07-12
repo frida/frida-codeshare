@@ -23,6 +23,7 @@
 
         <!-- Break -->
         <div class="12u$">
+          <p>Fingerprint: {{ fingerprint }}</p>
           <p class="error-message" v-model="errorMsg">${errorMsg}</p>
           <ul class="actions">
             {% if project.owner == request.user %}
