@@ -60,7 +60,7 @@ def project_view(request, nickname, project_slug):
         "project": project,
         "is_owner": project.is_owned_by(request.user),
         "user_has_liked_project": project.is_liked_by(request.user),
-        "fingerprint": hashlib.sha256(project.project_source).hexdigest()
+        "fingerprint": hashlib.sha256(project.project_source.encode('utf-8')).hexdigest()
     })
 
 
