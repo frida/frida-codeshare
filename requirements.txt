@@ -6,3 +6,4 @@ django-extensions
 voluptuous
 dj_database_url
 psycopg2
+raven

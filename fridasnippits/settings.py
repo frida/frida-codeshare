@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'django_auth0',
     'django_extensions',
+    'raven.contrib.django.raven_compat',
 
     'fridasnippits.apps.frontend',
 
@@ -119,7 +120,6 @@ if DEBUG:
     AUTH0_CALLBACK_URL = 'http://127.0.0.1:8000/auth/callback/'
 else:
     AUTH0_CALLBACK_URL = 'https://codeshare.frida.re/auth/callback/'
-    # AUTH0_CALLBACK_URL = 'https://frida-codeshare.herokuapp.com/auth/callback/'
 
 AUTH0_SUCCESS_URL = '/'
 
@@ -137,4 +137,8 @@ LOGGING = {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
+}
+
+RAVEN_CONFIG = {
+    'dsn': os.getenv("SENTRY_DSN", ""),
 }
