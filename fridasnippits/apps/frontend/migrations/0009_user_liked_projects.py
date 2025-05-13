@@ -6,15 +6,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('frontend', '0008_auto_20170528_0146'),
+        ("frontend", "0008_auto_20170528_0146"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='liked_projects',
-            field=models.ManyToManyField(related_name='liked_by', to='frontend.Project'),
+            model_name="user",
+            name="liked_projects",
+            field=models.ManyToManyField(
+                related_name="liked_by", to="frontend.Project"
+            ),
         ),
     ]

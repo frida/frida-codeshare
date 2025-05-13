@@ -7,15 +7,17 @@ import fridasnippits.apps.frontend.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('frontend', '0002_auto_20170527_0816'),
+        ("frontend", "0002_auto_20170527_0816"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='api_token',
-            field=models.TextField(default=fridasnippits.apps.frontend.models.generate_api_token, unique=True),
+            model_name="user",
+            name="api_token",
+            field=models.TextField(
+                default=fridasnippits.apps.frontend.models.generate_api_token,
+                unique=True,
+            ),
         ),
     ]

@@ -6,14 +6,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('frontend', '0009_user_liked_projects'),
+        ("frontend", "0009_user_liked_projects"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='project',
-            name='likes',
+            model_name="project",
+            name="likes",
         ),
     ]

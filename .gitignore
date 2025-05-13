@@ -3,3 +3,6 @@
 static/.sass-cache/*
 *.sqlite3
 db.sqlite3
+
+# Ignore environment variables
+*.env

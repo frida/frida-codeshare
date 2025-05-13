@@ -6,16 +6,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('frontend', '0010_remove_project_likes'),
+        ("frontend", "0010_remove_project_likes"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='latest_version',
-            field=models.TextField(default=''),
+            model_name="project",
+            name="latest_version",
+            field=models.TextField(default=""),
             preserve_default=False,
         ),
     ]
