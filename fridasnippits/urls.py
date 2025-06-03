@@ -5,6 +5,8 @@ from django.shortcuts import redirect
 
 import django_auth0.views
 
+from fridasnippits.apps.api import views
+
 
 def logout_view(request):
     logout(request)
@@ -37,4 +39,5 @@ urlpatterns = [
     re_path(r"^sign-out/?", logout_view),
     re_path(r"^api/", include("fridasnippits.apps.api.urls")),
     re_path(r"", include("fridasnippits.apps.frontend.urls")),
+    re_path("search/", views.search, name="search"),
 ]

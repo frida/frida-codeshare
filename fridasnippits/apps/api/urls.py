@@ -17,4 +17,5 @@ urlpatterns = [
     re_path(
         r"^project/(?P<nickname>[\w\-]+)/?", views.user_projects, name="user_projects"
     ),
+    re_path(r"^search/?", views.search, name="search_projects"),
 ]

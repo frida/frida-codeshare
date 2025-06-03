@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+
+  <!-- Section -->
+  <section>
+    <header class="major">
+      <h2>Search Results for "{{ query }}"</h2>
+    </header>
+    <div class="posts">
+      {% for project in projects %}
+        <article>
+          <h2><a href="{{ project.url }}">{{ project.project_name }}</a></h2>
+          <h3>
+            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> {{ project.liked_by.count }} | <i class="fa fa-eye" aria-hidden="true"></i> {{ project.view_count }}
+          </h3>
+          <h4>Uploaded by: <a href="/@{{ project.owner.nickname }}/">@{{ project.owner.nickname }}</a></h4>
+          <p>{{ project.description }}</p>
+          <ul class="actions">
+            <li><a href="{{ project.url }}" class="button">Project Page</a></li>
+            {% if project.is_owner %}
+              <li><a href="{{ project.url }}edit" class="button">Edit</a></li>
+            {% endif %}
+          </ul>
+        </article>
+      {% empty %}
+        <article>
+          <h3>No results found for "{{ query }}"</h3>
+          <p>Try a different search term or <a href="/browse">browse all projects</a>.</p>
+        </article>
+      {% endfor %}
+      {% if projects_are_odd %}
+        <article></article>
+      {% endif %}
+    </div>
+  </section>
+
+{% endblock %}

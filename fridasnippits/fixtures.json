@@ -1,0 +1,203 @@
+[
+  {
+    "model": "frontend.category",
+    "pk": 1,
+    "fields": {
+      "name": "iOS",
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.category",
+    "pk": 2,
+    "fields": {
+      "name": "Android",
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.category",
+    "pk": 3,
+    "fields": {
+      "name": "Utils",
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.category",
+    "pk": 4,
+    "fields": {
+      "name": "Network",
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.category",
+    "pk": 5,
+    "fields": {
+      "name": "Windows",
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.category",
+    "pk": 6,
+    "fields": {
+      "name": "macOS",
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.category",
+    "pk": 7,
+    "fields": {
+      "name": "Linux",
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.user",
+    "pk": 101,
+    "fields": {
+      "username": "johndoe",
+      "nickname": "alice-dev",
+      "api_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvYWFhYSBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.XPXIvBSz6JH7-FfJPX1kdxkNFaMcpfvvXVwk8Nt6wKY",
+      "liked_projects": [201, 204],
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.user",
+    "pk": 102,
+    "fields": {
+      "username": "bob-hacker",
+      "nickname": "hackerbob",
+      "api_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+      "liked_projects": [200, 203],
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.user",
+    "pk": 103,
+    "fields": {
+      "username": "charlie-security",
+      "nickname": "security-charlie",
+      "api_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvYWFhZGEnb2tmZGEgRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.NA4yAKWIZQet4mUFB-8IJ6hj88lw3vrO3NYUDfGNzn8",
+      "liked_projects": [200, 202],
+      "created": "2024-05-01T00:00:00Z",
+      "modified": "2024-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "frontend.project",
+    "pk": 200,
+    "fields": {
+      "project_id": "d8a1c9b8-b7a2-4a9e-8f9d-3c4b5a6d7e8f",
+      "owner": 101,
+      "project_name": "iOS App Bypass",
+      "project_slug": "ios-app-bypass",
+      "project_source": "// Bypass jailbreak detection\nvar paths = [\n    \"/Applications/Cydia.app\",\n    \"/Library/MobileSubstrate/MobileSubstrate.dylib\",\n    \"/bin/bash\",\n    \"/usr/sbin/sshd\",\n    \"/etc/apt\"\n];\n\nfunction checkAccess() {\n    var check = Module.findExportByName(null, \"access\");\n    Interceptor.attach(check, {\n        onEnter: function(args) {\n            var path = Memory.readUtf8String(args[0]);\n            for (var i = 0; i < paths.length; i++) {\n                if (path.indexOf(paths[i]) > -1) {\n                    console.log(\"Bypassing jailbreak detection...\");\n                    args[0] = Memory.allocUtf8String(\"/definitely/not/a/jailbroken/device\");\n                }\n            }\n        }\n    });\n}\n\ncheckAccess();",
+      "description": "Bypass jailbreak detection in iOS applications",
+      "hash": "416f9da3f7e9ddec7345183c8a1f45dd0e2ed6c9455bcdfaa6cdc67939c5df75",
+      "created": "2024-05-01T12:00:00Z",
+      "latest_version": "16.0.8",
+      "category": 1,
+      "modified": "2024-05-02T14:35:00Z"
+    }
+  },
+  {
+    "model": "frontend.project",
+    "pk": 201,
+    "fields": {
+      "project_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "owner": 102,
+      "project_name": "Android SSL Pinning Bypass",
+      "project_slug": "android-ssl-pinning-bypass",
+      "project_source": "// Android SSL Pinning Bypass\nJava.perform(function() {\n    console.log('SSL Pinning Bypass Script Loaded');\n    \n    var X509TrustManager = Java.use('javax.net.ssl.X509TrustManager');\n    var SSLContext = Java.use('javax.net.ssl.SSLContext');\n    \n    // TrustManager implementation\n    var TrustManager = Java.registerClass({\n        name: 'com.frida.TrustManager',\n        implements: [X509TrustManager],\n        methods: {\n            checkClientTrusted: function(chain, authType) {},\n            checkServerTrusted: function(chain, authType) {},\n            getAcceptedIssuers: function() {\n                return [];\n            }\n        }\n    });\n    \n    // Create a new instance of our TrustManager\n    var trustManager = TrustManager.$new();\n    \n    // Override SSLContext.init()\n    var init = SSLContext.init.overload(\n        '[Ljavax.net.ssl.KeyManager;', \n        '[Ljavax.net.ssl.TrustManager;', \n        'java.security.SecureRandom'\n    );\n    \n    init.implementation = function(keyManager, trustManager, secureRandom) {\n        console.log('Bypassing SSLContext.init()');\n        this.init(keyManager, [trustManager], secureRandom);\n    };\n    \n    console.log('SSL Pinning Bypass Complete');\n});",
+      "description": "Bypass SSL certificate pinning in Android applications",
+      "hash": "72e14fd4b829fb91e60ab690d513ca8e6c9c7cfce55e3ce275446b53c29859a2",
+      "created": "2024-05-02T14:35:00Z",
+      "latest_version": "16.0.8",
+      "category": 2,
+      "modified": "2024-05-02T14:35:00Z"
+    }
+  },
+  {
+    "model": "frontend.project",
+    "pk": 202,
+    "fields": {
+      "project_id": "f1e2d3c4-b5a6-7a8b-9c0d-1e2f3a4b5c6d",
+      "owner": 103,
+      "project_name": "Function Tracer",
+      "project_slug": "function-tracer",
+      "project_source": "// Function Tracer\nfunction traceFunction(targetModule, functionName) {\n    var address = Module.findExportByName(targetModule, functionName);\n    if (address === null) {\n        console.log(\"Function \" + functionName + \" not found in \" + targetModule);\n        return;\n    }\n\n    console.log(\"Tracing \" + targetModule + \"!\" + functionName + \" at \" + address);\n    \n    Interceptor.attach(address, {\n        onEnter: function(args) {\n            console.log(\"Called \" + functionName);\n            console.log(\"Arguments:\");\n            for (var i = 0; i < 4; i++) {  // Print first 4 arguments\n                console.log(\"  arg[\" + i + \"]: \" + args[i]);\n            }\n            // Store context for onLeave\n            this.args = args;\n        },\n        onLeave: function(retval) {\n            console.log(\"Return value: \" + retval);\n            console.log(\"-------------------\");\n        }\n    });\n}\n\n// Example usage\ntraceFunction(\"libSystem.B.dylib\", \"open\");\ntraceFunction(\"libc.so\", \"fopen\");",
+      "description": "Trace function calls with arguments and return values",
+      "hash": "9a18b20c74d9a3c6ed578e1e5c1f9c6d5b4a3e2d1c0b9a8f7e6d5c4b3a2e1d0c",
+      "created": "2024-05-03T09:12:00Z",
+      "latest_version": "16.0.8",
+      "category": 3,
+      "modified": "2024-05-02T14:35:00Z"
+    }
+  },
+  {
+    "model": "frontend.project",
+    "pk": 203,
+    "fields": {
+      "project_id": "a9b8c7d6-e5f4-3a2b-1c0d-9e8f7a6b5c4d",
+      "owner": 101,
+      "project_name": "Memory Scanner",
+      "project_slug": "memory-scanner",
+      "project_source": "// Memory Scanner\nfunction scanMemory(pattern) {\n    console.log(\"Starting memory scan for pattern: \" + pattern);\n    \n    var ranges = Process.enumerateRangesSync({protection: 'r--', coalesce: true});\n    var matches = [];\n    \n    for (var i = 0; i < ranges.length; i++) {\n        var range = ranges[i];\n        var matches_in_range = Memory.scanSync(range.base, range.size, pattern);\n        \n        if (matches_in_range.length > 0) {\n            matches = matches.concat(matches_in_range);\n        }\n    }\n    \n    console.log(\"Found \" + matches.length + \" matches:\");\n    \n    for (var j = 0; j < matches.length; j++) {\n        console.log(\"Address: \" + matches[j].address + \", Size: \" + matches[j].size);\n        // Print some surrounding memory for context\n        console.log(hexdump(matches[j].address, { length: 64, header: true }));\n    }\n    \n    return matches;\n}\n\n// Example usage: Search for a string\n// scanMemory(\"password\");",
+      "description": "Scan process memory for specific patterns",
+      "hash": "e1d2c3b4a5f6e7d8c9b0a1f2e3d4c5b6a7f8e9d0c1b2a3f4e5d6c7b8a9f0e1d2",
+      "created": "2024-05-04T16:45:00Z",
+      "latest_version": "16.0.8",
+      "category": 3,
+      "modified": "2024-05-02T14:35:00Z"
+    }
+  },
+  {
+    "model": "frontend.project",
+    "pk": 204,
+    "fields": {
+      "project_id": "e1d2c3b4-a5f6-e7d8-c9b0-a1f2e3d4c5b6",
+      "owner": 102,
+      "project_name": "Network Traffic Monitor",
+      "project_slug": "network-traffic-monitor",
+      "project_source": "// Network Traffic Monitor\nJava.perform(function() {\n    var HttpURLConnection = Java.use(\"java.net.HttpURLConnection\");\n    var URL = Java.use(\"java.net.URL\");\n    var InputStreamReader = Java.use(\"java.io.InputStreamReader\");\n    var BufferedReader = Java.use(\"java.io.BufferedReader\");\n    var StringBuilder = Java.use(\"java.lang.StringBuilder\");\n    var OutputStream = Java.use(\"java.io.OutputStream\");\n\n    // Intercept URL.openConnection\n    URL.openConnection.implementation = function() {\n        var connection = this.openConnection();\n        var url = this.toString();\n        console.log(\"[+] Opening connection to: \" + url);\n        return connection;\n    };\n\n    // Intercept HttpURLConnection.getInputStream\n    HttpURLConnection.getInputStream.implementation = function() {\n        var stream = this.getInputStream();\n        console.log(\"[+] Reading response from: \" + this.getURL().toString());\n        \n        // Read and log the response\n        try {\n            var reader = BufferedReader.$new(InputStreamReader.$new(stream));\n            var line;\n            var response = StringBuilder.$new();\n            \n            while ((line = reader.readLine()) !== null) {\n                response.append(line);\n                response.append(\"\\n\");\n            }\n            \n            console.log(\"[+] Response body: \" + response.toString());\n        } catch (e) {\n            console.log(\"[-] Error reading response: \" + e);\n        }\n        \n        return stream;\n    };\n\n    // Intercept HttpURLConnection.getOutputStream\n    HttpURLConnection.getOutputStream.implementation = function() {\n        var stream = this.getOutputStream();\n        console.log(\"[+] Writing request to: \" + this.getURL().toString());\n        return stream;\n    };\n});",
+      "description": "Monitor and log network traffic from the application",
+      "hash": "f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8",
+      "created": "2024-05-05T10:23:00Z",
+      "latest_version": "16.0.8",
+      "category": 4,
+      "modified": "2024-05-02T14:35:00Z"
+    }
+  },
+  {
+    "model": "frontend.project",
+    "pk": 205,
+    "fields": {
+      "project_id": "7219bc51-db5b-4d02-ae59-92c0e92f367c",
+      "owner": 103,
+      "project_name": "iOS Keychain Dumper",
+      "project_slug": "ios-keychain-dumper",
+      "project_source": "// iOS Keychain Dumper\nvar SecItemCopyMatching = new NativeFunction(\n    Module.findExportByName('Security', 'SecItemCopyMatching'),\n    'int',\n    ['pointer', 'pointer']\n);\n\nvar SecItemDelete = new NativeFunction(\n    Module.findExportByName('Security', 'SecItemDelete'),\n    'int',\n    ['pointer']\n);\n\nvar NSStringClass = ObjC.classes.NSString;\nvar NSMutableDictionaryClass = ObjC.classes.NSMutableDictionary;\n\nvar kSecClassKey = NSStringClass.stringWithString_(\"class\");\nvar kSecClassValue = NSStringClass.stringWithString_(\"genp\");\nvar kSecReturnDataKey = NSStringClass.stringWithString_(\"r_Data\");\nvar kSecAttrServiceKey = NSStringClass.stringWithString_(\"svce\");\nvar kSecMatchLimitKey = NSStringClass.stringWithString_(\"m_Limit\");\nvar kSecMatchLimitValue = NSStringClass.stringWithString_(\"m_AttributeMatchLimit\");\nvar kSecReturnAttributesKey = NSStringClass.stringWithString_(\"r_Attributes\");\n\nfunction dumpKeychains() {\n    console.log(\"\\n[*] Dumping keychain items...\");\n\n    var query = NSMutableDictionaryClass.alloc().init();\n    query.setObject_forKey_(kSecClassValue, kSecClassKey);\n    query.setObject_forKey_(kSecReturnAttributesKey, kSecReturnDataKey);\n    query.setObject_forKey_(kSecMatchLimitValue, kSecMatchLimitKey);\n\n    var result = Memory.alloc(Process.pointerSize);\n    var status = SecItemCopyMatching(query, result);\n\n    if (status !== 0) {\n        console.log(\"[-] Failed to query keychain, status: \" + status);\n        return;\n    }\n\n    var resultObj = new ObjC.Object(Memory.readPointer(result));\n    var count = resultObj.count().valueOf();\n\n    console.log(\"[+] Found \" + count + \" keychain items\");\n\n    for (var i = 0; i < count; i++) {\n        var item = resultObj.objectAtIndex_(i);\n        console.log(\"\\n--- Item \" + (i + 1) + \" ---\");\n        \n        var keys = item.allKeys();\n        var keysCount = keys.count().valueOf();\n        \n        for (var j = 0; j < keysCount; j++) {\n            var key = keys.objectAtIndex_(j);\n            var value = item.objectForKey_(key);\n            console.log(key + \": \" + value);\n        }\n    }\n}\n\ndumpKeychains();",
+      "description": "Extract and display iOS keychain items",
+      "hash": "c1d2e3f4g5h6i7j8k9l0m1n2o3p4q5r6s7t8u9v0w1x2y3z4a5b6c7d8e9f0g1h2",
+      "created": "2024-05-06T08:15:00Z",
+      "latest_version": "16.0.8",
+      "category": 1,
+      "modified": "2024-05-02T14:35:00Z"
+    }
+  }
+]

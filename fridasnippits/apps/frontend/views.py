@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.db import models
 
 # Create your views here.
 from django.urls import reverse
@@ -141,5 +142,45 @@ def user_info_view(request, nickname):
             "info_user": requested_user,
             "projects": projects_queryset,
             "projects_are_odd": len(projects_queryset) % 2 == 1,
+        },
+    )
+
+
+def search(request):
+    query = request.GET.get("query", "")
+    results = []
+
+    if query:
+        # Search in project name, description, and source code
+        results = (
+            Project.objects.filter(
+                models.Q(project_name__icontains=query)
+                | models.Q(description__icontains=query)
+                | models.Q(project_source__icontains=query)
+            )
+            .annotate(count=Count("liked_by"))
+            .order_by("-count")
+        )
+
+    # Add URL to each result
+    for project in results:
+        project.url = request.build_absolute_uri(
+            reverse(
+                "project_view",
+                kwargs={
+                    "nickname": "@" + project.owner.nickname,
+                    "project_slug": project.project_slug,
+                },
+            )
+        )
+        project.is_owner = project.is_owned_by(request.user)
+
+    return render(
+        request,
+        "search_results.html",  # we'll create this template
+        {
+            "projects": results,
+            "query": query,
+            "projects_are_odd": len(results) % 2 == 1,
         },
     )
