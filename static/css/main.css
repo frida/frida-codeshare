@@ -3019,3 +3019,55 @@ button,
     padding-top: 0; }
 
 /*# sourceMappingURL=main.css.map */
+
+
+.header-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.user-options a {
+  margin-right: 10px;
+  white-space: nowrap;
+  font-size: 0.95em;
+  line-height: 1.5em;
+}
+
+form.search {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+form.search input[type="text"] {
+  padding: 6px 10px;
+  font-size: 0.95em;
+  line-height: 1.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 34px;
+  box-sizing: border-box;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .header-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  form.search {
+    width: 100%;
+  }
+
+  form.search input[type="text"] {
+    width: 100%;
+  }
+}
+

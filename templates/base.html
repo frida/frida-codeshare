@@ -22,29 +22,34 @@
 
         <!-- Header -->
         <header id="header">
-          <ul class="icons">
-            <li><a href="/" class="logo">Frida CodeShare</a></li>
-            <li><a href="https://twitter.com/fridadotre" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-            <li><a href="https://github.com/frida" class="icon fa-github"><span class="label">Github</span></a></li>
-          </ul>
-          
-          <form class="search" method="get" action="/search/">
-            <input type="text" name="query" id="query" placeholder="Search" />
-          </form>
-          
-          {% if user.is_authenticated %}
-            <div class="right-aligned">
-            {% if user.is_superuser %}
-              <a href="/django_admin" class="logo right">Admin Panel</a> |
-            {% endif %}
-              <a href="/@{{ user.nickname }}" class="logo right">Your Projects</a> |
-              <a href="/new" class="logo right">Create New Project</a> |
-              <a class="logo right" href="/sign-out">Log Out</a>
-            </div>
-          {% else %}
-            <a href="" class="logo right login">Log In</a>
-          {% endif %}
-        </header>
+  <ul class="icons">
+    <li><a href="/" class="logo">Frida CodeShare</a></li>
+    <li><a href="https://twitter.com/fridadotre" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+    <li><a href="https://github.com/frida" class="icon fa-github"><span class="label">Github</span></a></li>
+  </ul>
+
+  <div class="header-right">
+    {% if user.is_authenticated %}
+      <div class="user-options">
+        {% if user.is_superuser %}
+          <a href="/django_admin" class="logo right">Admin Panel</a> |
+        {% endif %}
+        <a href="/@{{ user.nickname }}" class="logo right">Your Projects</a> |
+        <a href="/new" class="logo right">Create New Project</a> |
+        <a class="logo right" href="/sign-out">Log Out</a>
+      </div>
+    {% else %}
+      <div class="user-options">
+        <a href="" class="logo right login">Log In</a>
+      </div>
+    {% endif %}
+
+    <form class="search" method="get" action="/search/">
+      <input type="text" name="query" id="query" placeholder="Search" />
+    </form>
+  </div>
+</header>
+
 
 
         {% block body %}{% endblock %}
