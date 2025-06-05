@@ -40,3 +40,10 @@ Frida Codeshare is allows users to share and discover Frida scripts. It provides
    ```
 
 5. Open your web browser and navigate to `http://localhost:8000` to access the Frida Codeshare web application.
+
+## Fixtures
+To load the fixtures, run the following command:
+
+```bash
+uv run manage.py loaddata fridasnippets/apps/fixtures/fixtures.json
+```
