@@ -1,9 +1,10 @@
-django
-whitenoise
+django==1.11.29
+whitenoise==4.1.4
+gunicorn==19.9.0
+django-extensions==2.2.1
+voluptuous==0.11.5
+dj_database_url==0.5.0
+psycopg2==2.8.6
+
 django-auth0
-gunicorn
-django-extensions
-voluptuous
-dj_database_url
-psycopg2
 raven
