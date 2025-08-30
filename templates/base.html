@@ -40,7 +40,7 @@
       </div>
     {% else %}
       <div class="user-options">
-        <a href="" class="logo right login">Log In</a>
+        <a href="/login/auth0" class="logo right">Log In</a>
       </div>
     {% endif %}
 
@@ -159,39 +159,7 @@
       });
     </script>
 
-  <script src="https://cdn.auth0.com/js/lock/10.16.0/lock.min.js"></script>
-
-  <script>
-      $(document).ready(function () {
-          var lock = new Auth0Lock(
-              "{{ AUTH0_CLIENT_ID }}",
-              "{{ AUTH0_DOMAIN }}",
-              {
-                  allowedConnections: ["google-oauth2", "github"],
-                  rememberLastLogin: true,
-                  socialButtonStyle: "big",
-                  languageDictionary: {"title": "Auth0"},
-                  language: "en",
-                  theme: {
-                      "logo": "{% static "images/logo-small.png" %}",
-                      "primaryColor": "#EF6456"
-                  },
-                  auth: {
-                      redirectUrl: '{{ AUTH0_CALLBACK_URL }}',
-                      responseType: 'code',
-                      params: {
-                          scope: 'openid email'
-                      }
-                  }
-              }
-          );
-
-          $('.login').click(function (e) {
-              e.preventDefault();
-              lock.show();
-          });
-      });
-  </script>
+  <!-- Auth0 Lock removed - using server-side authentication -->
 
     {% block extrascripts %}{% endblock %}
 

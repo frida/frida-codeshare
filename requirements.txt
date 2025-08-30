@@ -3,7 +3,8 @@ certifi==2025.4.26
 charset-normalizer==3.4.2
 dj-database-url==2.3.0
 django==5.2.1
-django-auth0==0.0.3
+social-auth-app-django==5.4.0
+social-auth-core==4.5.3
 django-extensions==4.1
 gunicorn==23.0.0
 idna==3.10
