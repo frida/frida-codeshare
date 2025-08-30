@@ -43,14 +43,15 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "django.contrib.admin",
-    "django_auth0",
+    "social_django",
     "django_extensions",
     "raven.contrib.django.raven_compat",
     "fridasnippits.apps.frontend",
 ]
 
 AUTHENTICATION_BACKENDS = [
-    "django_auth0.auth_backend.Auth0Backend",
+    "social_core.backends.auth0.Auth0OAuth2",
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 AUTH_USER_MODEL = "frontend.User"
@@ -79,7 +80,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "django_auth0.context_processors.auth0",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -112,16 +114,34 @@ CACHES = {
     }
 }
 
-AUTH0_DOMAIN = "frida-codeshare.auth0.com"
-AUTH0_CLIENT_ID = "CAjPH9xC2RveJ7Ai2NGVJHqpqLNDxqXB"
-AUTH0_SECRET = os.environ["AUTH0_CLIENT_SECRET"]
+# Auth0 settings for social-auth-app-django
+SOCIAL_AUTH_AUTH0_DOMAIN = "frida-codeshare.auth0.com"
+SOCIAL_AUTH_AUTH0_KEY = "CAjPH9xC2RveJ7Ai2NGVJHqpqLNDxqXB"
+SOCIAL_AUTH_AUTH0_SECRET = os.environ["AUTH0_CLIENT_SECRET"]
+SOCIAL_AUTH_AUTH0_SCOPE = [
+    'openid',
+    'profile',
+    'email'
+]
 
-if DEBUG:
-    AUTH0_CALLBACK_URL = "http://127.0.0.1:8000/auth/callback/"
-else:
-    AUTH0_CALLBACK_URL = "https://codeshare.frida.re/auth/callback/"
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = not DEBUG
+LOGIN_URL = '/login/auth0'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
-AUTH0_SUCCESS_URL = "/"
+# Pipeline to handle user creation and updates
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'fridasnippits.social_pipeline.associate_existing_user',  # Match existing users BEFORE social_user
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'fridasnippits.social_pipeline.save_auth0_profile',  # Custom function for Auth0 profile
+)
 
 LOGGING = {
     "version": 1,

@@ -2,8 +2,8 @@ from django.urls import include, re_path
 from django.contrib import admin
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django.views.generic import RedirectView
 
-import django_auth0.views
 
 from fridasnippits.apps.api import views
 
@@ -33,8 +33,9 @@ def hook_login_process(function):
 admin.autodiscover()
 
 urlpatterns = [
-    # url(r'^admin/', admin.site.urls),
-    re_path(r"^auth/callback/?", hook_login_process(django_auth0.views.process_login)),
+    # Include social_django URLs (handles /login/auth0 and /complete/auth0/)
+    re_path('', include('social_django.urls', namespace='social')),
+    
     re_path(r"^django_admin/", admin.site.urls),
     re_path(r"^sign-out/?", logout_view),
     re_path(r"^api/", include("fridasnippits.apps.api.urls")),
