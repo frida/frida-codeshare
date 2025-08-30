@@ -6,16 +6,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('frontend', '0004_project_hash'),
+        ("frontend", "0004_project_hash"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='slug',
-            field=models.TextField(default=''),
+            model_name="project",
+            name="slug",
+            field=models.TextField(default=""),
             preserve_default=False,
         ),
     ]

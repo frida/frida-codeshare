@@ -6,18 +6,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('frontend', '0005_project_slug'),
+        ("frontend", "0005_project_slug"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='project',
+            name="project",
             options={},
         ),
         migrations.AlterUniqueTogether(
-            name='project',
-            unique_together=set([('owner', 'slug')]),
+            name="project",
+            unique_together=set([("owner", "slug")]),
         ),
     ]

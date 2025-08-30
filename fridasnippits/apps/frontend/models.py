@@ -6,13 +6,17 @@ from django.db.models import F
 from django_extensions.db.models import TimeStampedModel
 from django.utils.crypto import get_random_string
 
+
 def generate_api_token():
     return get_random_string(64)
 
+
 class Project(TimeStampedModel):
     project_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    owner = models.ForeignKey('frontend.User')
-    category = models.ForeignKey('frontend.Category')
+    owner = models.ForeignKey("frontend.User", on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        "frontend.Category", on_delete=models.CASCADE, null=True
+    )
     project_name = models.TextField()
     project_source = models.TextField()
     description = models.TextField()
@@ -31,12 +35,12 @@ class Project(TimeStampedModel):
             "description": self.description,
             "source": self.project_source,
             "slug": self.project_slug,
-            "frida_version": self.latest_version
+            "frida_version": self.latest_version,
         }
 
     @staticmethod
     def generate_slug(name):
-        return name.replace(' ', '-').lower()
+        return name.replace(" ", "-").lower()
 
     def _human_format(self, num):
         magnitude = 0
@@ -44,7 +48,7 @@ class Project(TimeStampedModel):
             magnitude += 1
             num /= 1000.0
         # add more suffixes if you need them
-        return '%d%s' % (num, ['', 'K', 'M', 'G', 'T', 'P'][magnitude])
+        return "%d%s" % (num, ["", "K", "M", "G", "T", "P"][magnitude])
 
     @property
     def vote_count(self):
@@ -59,14 +63,15 @@ class Project(TimeStampedModel):
         return "$ frida --codeshare {}/{}".format(self.owner.nickname, self.slug)
 
     def increment_view(self):
-        self.views = F('views') + 1
+        self.views = F("views") + 1
         self.save()
 
     def is_owned_by(self, user):
         return user == self.owner
 
     def is_liked_by(self, user):
-        return user.id in self.liked_by.values_list('id', flat=True)
+        return user.id in self.liked_by.values_list("id", flat=True)
+
 
 class User(AbstractUser, TimeStampedModel):
     nickname = models.TextField(null=True)

@@ -6,16 +6,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('frontend', '0006_auto_20170528_0041'),
+        ("frontend", "0006_auto_20170528_0041"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='description',
-            field=models.TextField(default=''),
+            model_name="project",
+            name="description",
+            field=models.TextField(default=""),
             preserve_default=False,
         ),
     ]
