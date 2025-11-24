@@ -25,20 +25,27 @@ class Project(TimeStampedModel):
     project_slug = models.TextField()
     latest_version = models.TextField()
 
+    SCOPE_DETAILED = "detailed"
+    SCOPE_EMBEDDED = "embedded"
+
     class Meta:
         unique_together = ("owner", "project_slug")
 
-    def serialize(self):
-        return {
+    def serialize(self, scope):
+        data = {
             "id": str(self.project_id),
             "project_name": self.project_name,
             "description": self.description,
-            "source": self.project_source,
             "owner": self.owner.nickname,
             "slug": self.project_slug,
             "frida_version": self.latest_version,
             "likes": self.liked_by.count(),
         }
+
+        if scope != self.SCOPE_EMBEDDED:
+            data["source"] = self.project_source
+
+        return data
 
     @staticmethod
     def generate_slug(name):

@@ -133,7 +133,7 @@ def project_data(request, nickname, project_slug):
         owner = User.objects.get(nickname__iexact=nickname)
         project = Project.objects.get(owner=owner, project_slug=project_slug)
         return HttpResponse(
-            json.dumps(project.serialize(), indent=4), content_type="application/json"
+            json.dumps(project.serialize(scope=Project.SCOPE_DETAILED), indent=4), content_type="application/json"
         )
     except:
         return JsonResponse({"success": False, "error": "Not found!"}, status=404)
@@ -144,7 +144,7 @@ def user_projects(request, nickname):
         owner = User.objects.get(nickname__iexact=nickname)
         payload = []
         for project in owner.project_set.all():
-            payload.append(project.serialize())
+            payload.append(project.serialize(scope=Project.SCOPE_EMBEDDED))
 
         return HttpResponse(
             json.dumps(payload, indent=4), content_type="application/json"
@@ -163,7 +163,7 @@ def popular_projects(request):
         .order_by("-likes_count")[:limit]
     )
 
-    payload = [p.serialize() for p in projects]
+    payload = [p.serialize(scope=Project.SCOPE_EMBEDDED) for p in projects]
     return JsonResponse(payload, safe=False)
 
 
@@ -185,7 +185,7 @@ def project_search_api(request):
         .order_by("-likes_count")[:limit]
     )
 
-    payload = [p.serialize() for p in results]
+    payload = [p.serialize(scope=Project.SCOPE_EMBEDDED) for p in results]
     return JsonResponse(payload, safe=False)
 
 
