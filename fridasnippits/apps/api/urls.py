@@ -1,4 +1,4 @@
-from django.urls import re_path
+from django.urls import path, re_path
 from fridasnippits.apps.api import views
 
 urlpatterns = [
@@ -17,5 +17,6 @@ urlpatterns = [
     re_path(
         r"^project/(?P<nickname>[\w\-]+)/?", views.user_projects, name="user_projects"
     ),
+    path("projects/popular", views.popular_projects, name="popular_projects"),
     re_path(r"^search/?", views.search, name="search_projects"),
 ]

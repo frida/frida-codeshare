@@ -153,6 +153,20 @@ def user_projects(request, nickname):
         return JsonResponse({"success": False, "error": "Not found!"}, status=404)
 
 
+@require_http_methods(["GET"])
+def popular_projects(request):
+    limit = int(request.GET.get("limit", "50"))
+
+    projects = (
+        Project.objects
+        .annotate(likes_count=Count("liked_by"))
+        .order_by("-likes_count")[:limit]
+    )
+
+    payload = [p.serialize() for p in projects]
+    return JsonResponse(payload, safe=False)
+
+
 def search(request):
     query = request.GET.get("query", "")
     results = []
