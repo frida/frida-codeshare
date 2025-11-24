@@ -34,8 +34,10 @@ class Project(TimeStampedModel):
             "project_name": self.project_name,
             "description": self.description,
             "source": self.project_source,
+            "owner": self.owner.nickname,
             "slug": self.project_slug,
             "frida_version": self.latest_version,
+            "likes": self.liked_by.count(),
         }
 
     @staticmethod
