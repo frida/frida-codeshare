@@ -167,7 +167,29 @@ def popular_projects(request):
     return JsonResponse(payload, safe=False)
 
 
-def search(request):
+@require_http_methods(["GET"])
+def project_search_api(request):
+    query = request.GET.get("query")
+    if not query:
+        return JsonResponse({"error": "Missing query"}, status=400)
+
+    limit = int(request.GET.get("limit", "50"))
+
+    results = (
+        Project.objects.filter(
+            models.Q(project_name__icontains=query)
+            | models.Q(description__icontains=query)
+            | models.Q(project_source__icontains=query)
+        )
+        .annotate(likes_count=Count("liked_by"))
+        .order_by("-likes_count")[:limit]
+    )
+
+    payload = [p.serialize() for p in results]
+    return JsonResponse(payload, safe=False)
+
+
+def search_page(request):
     query = request.GET.get("query", "")
     results = []
 

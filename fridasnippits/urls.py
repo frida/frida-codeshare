@@ -40,5 +40,5 @@ urlpatterns = [
     re_path(r"^sign-out/?", logout_view),
     re_path(r"^api/", include("fridasnippits.apps.api.urls")),
     re_path(r"", include("fridasnippits.apps.frontend.urls")),
-    re_path("search/", views.search, name="search"),
+    re_path("search/", views.search_page, name="search"),
 ]

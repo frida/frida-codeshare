@@ -18,5 +18,6 @@ urlpatterns = [
         r"^project/(?P<nickname>[\w\-]+)/?", views.user_projects, name="user_projects"
     ),
     path("projects/popular", views.popular_projects, name="popular_projects"),
-    re_path(r"^search/?", views.search, name="search_projects"),
+    path("projects/search", views.project_search_api, name="project_search_api"),
+    re_path(r"^search/?", views.search_page, name="search"),
 ]
