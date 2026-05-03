@@ -6,3 +6,6 @@ db.sqlite3
 
 # Ignore environment variables
 *.env
+.netrc
+
+.venv/
