@@ -39,3 +39,34 @@ class SearchEndpointTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "/@melanie.valentetransp/android-ssl-bypass/")
+
+
+class BrowsePaginationTests(TestCase):
+    """Regression test for issue #9: browse paginated by ``-count`` only,
+    so projects with tied like counts could appear on multiple pages on
+    Postgres (which gives no ordering guarantee for ties under LIMIT/
+    OFFSET). SQLite happens to be deterministic for ties so a behavioral
+    test wouldn't catch it — instead, assert the queryset's ``ORDER BY``
+    includes a unique tiebreaker."""
+
+    def _browse_queryset(self):
+        owner = User.objects.create(username="alice", nickname="alice")
+        Project.objects.create(
+            owner=owner,
+            project_name="p",
+            project_source="",
+            description="",
+            project_slug="p",
+            hash="",
+            latest_version="",
+        )
+        response = self.client.get("/browse")
+        return response.context["projects"].paginator.object_list
+
+    def test_browse_orders_by_unique_tiebreaker(self):
+        order_by = self._browse_queryset().query.order_by
+        self.assertIn(
+            "id", [field.lstrip("-") for field in order_by],
+            f"browse ORDER BY {order_by!r} lacks a unique tiebreaker; "
+            "tied rows can appear on multiple pages on Postgres",
+        )

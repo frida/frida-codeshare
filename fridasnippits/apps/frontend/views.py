@@ -14,7 +14,10 @@ from fridasnippits.apps.frontend.models import Category, Project, User
 
 
 def index(request):
-    projects = Project.objects.annotate(count=Count("liked_by")).order_by("-count")[:6]
+    projects = (
+        Project.objects.annotate(count=Count("liked_by"))
+        .order_by("-count", "-created", "-id")[:6]
+    )
     for project in projects:
         project.url = request.build_absolute_uri(
             reverse(
@@ -33,7 +36,10 @@ def index(request):
 
 
 def browse(request):
-    projects = Project.objects.annotate(count=Count("liked_by")).order_by("-count")
+    projects = (
+        Project.objects.annotate(count=Count("liked_by"))
+        .order_by("-count", "-created", "-id")
+    )
     paginator = Paginator(projects, 16)
     page = request.GET.get("page")
     try:
@@ -159,7 +165,7 @@ def search(request):
                 | models.Q(project_source__icontains=query)
             )
             .annotate(count=Count("liked_by"))
-            .order_by("-count")
+            .order_by("-count", "-created", "-id")
         )
 
     # Add URL to each result

@@ -160,7 +160,7 @@ def popular_projects(request):
     projects = (
         Project.objects
         .annotate(likes_count=Count("liked_by"))
-        .order_by("-likes_count")[:limit]
+        .order_by("-likes_count", "-created", "-id")[:limit]
     )
 
     payload = [p.serialize(scope=Project.SCOPE_EMBEDDED) for p in projects]
@@ -182,7 +182,7 @@ def project_search_api(request):
             | models.Q(project_source__icontains=query)
         )
         .annotate(likes_count=Count("liked_by"))
-        .order_by("-likes_count")[:limit]
+        .order_by("-likes_count", "-created", "-id")[:limit]
     )
 
     payload = [p.serialize(scope=Project.SCOPE_EMBEDDED) for p in results]
@@ -202,7 +202,7 @@ def search_page(request):
                 | models.Q(project_source__icontains=query)
             )
             .annotate(count=Count("liked_by"))
-            .order_by("-count")
+            .order_by("-count", "-created", "-id")
         )
 
     # Add URL to each result
