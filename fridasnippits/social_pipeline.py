@@ -36,12 +36,13 @@ def save_auth0_profile(strategy, details, response, user=None, *args, **kwargs):
     logger.error(f"Current user: {user}")
     
     if user:
-        # Get nickname from Auth0 profile
+        from fridasnippits.apps.frontend.models import User
+
         nickname = response.get('nickname') or details.get('username')
-        
-        # Update user with Auth0 profile data
+
         if nickname and not user.nickname:
-            user.nickname = nickname
-            user.save()
+            if not User.objects.exclude(pk=user.pk).filter(nickname__iexact=nickname).exists():
+                user.nickname = nickname
+                user.save()
     
     return {'user': user}
